@@ -31,7 +31,7 @@ router.post('/connect', (req, res, next) => {
         ssid,
         password
     } = req.body;
-    const commandString = `nmcli device wifi connect "${ssid}" password ${password}`;
+    const commandString = `nmcli device wifi connect "${ssid}" password "${password}"`;
     console.log(commandString)
     exec(commandString, (err, std, stderr) => {
         if (err || stderr) {
