@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const util = require('util');
 
-const {
-    exec
-} = require('child_process');
-router.get('/list', (req, res, next) => {
+const exec = util.promisify(require('child_process').exec);
+router.get('/list', async (req, res, next) => {
     const commandString = ` nmcli -t  --fields=DEVICE,TYPE,STATE,CONNECTION d`;
-    exec(commandString, (err, std, stderr) => {
-        if (err || stderr) {
-            return next(err || stderr);
+    try {
+        const {
+            stdout,
+            stderr
+        } = await exec(commandString);
+
+        if (stderr) {
+            throw new Error(stderr);
 
         }
-        const lines = std.split('\n').filter(line => !!line);
+        const lines = stdout.split('\n').filter(line => !!line);
         const devices = lines.map(line => {
             const parts = line.split(':');
             return {
@@ -23,6 +27,8 @@ router.get('/list', (req, res, next) => {
         });
 
         res.json(devices);
-    });
+    } catch (e) {
+        next(e);
+    }
 });
 module.exports = router;

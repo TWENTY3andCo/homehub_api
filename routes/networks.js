@@ -1,16 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const {
-    exec
-} = require('child_process');
+// const {
+//     exec
+// } = require('child_process');
+const util = require('util');
 
-router.get('/list', (req, res, next) => {
-    exec(' nmcli -f SSID,IN-USE,SIGNAL,SECURITY -t dev wifi list', (err, std, stderr) => {
-        if (err || stderr) {
-            return nexr(err || stderr);
+const exec = util.promisify(require('child_process').exec);
+router.get('/list', async (req, res, next) => {
+    const commandString = `nmcli -f SSID,IN-USE,SIGNAL,SECURITY -t dev wifi list`;
+    try {
+        const {
+            stdout,
+            stderr
+        } = await exec(commandString);
+        if (stderr) {
+            throw new Error(stderr);
         }
-        console.log(std)
-        let networks = std.split("\n");
+        let networks = stdout.split("\n");
         networks = networks.map(line => {
             const parts = line.split(":");
             return {
@@ -21,7 +27,9 @@ router.get('/list', (req, res, next) => {
             }
         }).filter(e => e.ssid.length > 0);
         res.json(networks);
-    });
+    } catch (e) {
+        next(e);
+    }
 });
 
 router.post('/connect', (req, res, next) => {
