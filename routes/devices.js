@@ -22,9 +22,7 @@ router.get('/list', (req, res, next) => {
             };
         });
 
-        res.json({
-            devices
-        });
+        res.json(devices);
     });
 });
 module.exports = router;

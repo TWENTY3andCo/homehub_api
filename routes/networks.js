@@ -20,9 +20,7 @@ router.get('/list', (req, res, next) => {
                 security: parts[3]
             }
         }).filter(e => e.ssid.length > 0);
-        res.json({
-            networks
-        });
+        res.json(networks);
     });
 });
 
