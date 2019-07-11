@@ -22,3 +22,5 @@ You need to do a `POST` request to `localhost:3000/api/networks/connect`.
 In the body of the request you have to pass 2 values:
 * ssid (The ssid of the network)
 * password
+
+The full documentation is available [here]( https://app.swaggerhub.com/apis-docs/kounelios13/nmcli-api/1.0.0#/default/get_api_networks_list)
