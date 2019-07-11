@@ -6,14 +6,14 @@ Run `npm instal` to install dependencies and the npm start to run the `api`
 
 Do a `GET` request at `localhost:3000/api/networks/list`
 
-This returns an object like this:
+This returns an array like this:
 ```
-{
-    "networks":[
-        {ssid:"foo","in_use":"false","signal":87,security:"WPA1 WPA2"},
-        {ssid:"foo2","in_use":"true","signal":56,security:"WPA1 WPA2"}
-    ]
-}
+
+[
+    {ssid:"foo","in_use":"false","signal":87,security:"WPA1 WPA2"},
+    {ssid:"foo2","in_use":"true","signal":56,security:"WPA1 WPA2"}
+]
+
 ```
 
 # Connect to a specific wifi
