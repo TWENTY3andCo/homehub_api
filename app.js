@@ -10,7 +10,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     console.log('origin ', origin)
     // if origin is undefined it means we use this on localhost
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin || origin.includes('localhost')) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
