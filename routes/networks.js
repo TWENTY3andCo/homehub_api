@@ -25,32 +25,32 @@ router.get('/list', async (req, res, next) => {
                 signal: parts[2],
                 security: parts[3]
             }
-        }).filter(e => e.ssid.length > 0);
+        }).filter(e => !!e.ssid);
         res.json(networks);
     } catch (e) {
         next(e);
     }
 });
 
-router.post('/connect', (req, res, next) => {
+router.post('/connect', async (req, res, next) => {
     const {
         ssid,
         password
     } = req.body;
     const commandString = `nmcli device wifi connect "${ssid}" password "${password}"`;
-    console.log(commandString)
-    exec(commandString, (err, std, stderr) => {
-        if (err || stderr) {
-            return next(err || stderr);
-        }
-        console.log({
-            err,
-            std,
+    try {
+        const {
+            stdout,
             stderr
-        });
+        } = await exec(commandString);
+        if (stderr) {
+            throw new Error(stderr);
+        }
         res.json({
-            std
+            stdout
         });
-    })
+    } catch (e) {
+        next(e);
+    }
 });
 module.exports = router;
