@@ -21,7 +21,8 @@ router.get('/list', async (req, res, next) => {
                 uuid: parts[1],
                 type: parts[2],
                 active: parts[3] == 'yes',
-                device: parts[4]
+                device: parts[4],
+                state: parts[5]
             };
             return connection;
         }).filter(connection => !!connection.name);
