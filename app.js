@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
 const cors = require('cors');
-const allowedOrigins = ["https://app.swaggerhub.com"]
+const allowedOrigins = ["https://app.swaggerhub.com"];
 const corsOptions = {
   //origin: 'https://app.swaggerhub.com'
   origin: function (origin, callback) {
@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use('/api/networks', require('./routes/networks'));
 app.use('/api/devices', require('./routes/devices'));
+app.use('/api/system',require('./routes/system'));
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
