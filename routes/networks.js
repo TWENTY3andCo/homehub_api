@@ -4,7 +4,7 @@ const router = express.Router();
 //     exec
 // } = require('child_process');
 const util = require('util');
-
+const fs = require('fs');
 const exec = util.promisify(require('child_process').exec);
 router.get('/list', async (req, res, next) => {
     const commandString = `nmcli -f SSID,IN-USE,SIGNAL,SECURITY -t dev wifi list`;
@@ -31,6 +31,34 @@ router.get('/list', async (req, res, next) => {
         next(e);
     }
 });
+
+router.get('/leases',async (req,res,next)=>{
+    try{
+        let leaseFileCommand = "cat /var/lib/misc/dnsmasq.leases";
+
+        const {
+            stdout,
+            stderr
+        } = await exec(commandString);
+        if(stderr){
+            throw new Error(stderr);
+        }
+        let leases = stdout.split('\n').map(line=>{
+            const parts = line.split(" ");
+            return {
+                leaseTime:parts[0],
+                staticIp:parts[0]==0,
+                macAddress:parts[1],
+                ipAddress:parts[2],
+                name:parts[3]
+            }
+        });
+        leases.pop();
+        res.json(leases);
+    }catch(e){
+        next(e);
+    }
+})
 
 router.post('/connect', (req, res, next) => {
     const {
