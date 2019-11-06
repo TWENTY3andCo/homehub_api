@@ -53,7 +53,7 @@ router.get('/leases',async (req,res,next)=>{
                 name:parts[3]
             }
         });
-        //leases.pop();
+        leases.pop();
         res.json(leases);
     }catch(e){
         next(e);
