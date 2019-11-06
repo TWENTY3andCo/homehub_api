@@ -39,7 +39,7 @@ router.get('/leases',async (req,res,next)=>{
         const {
             stdout,
             stderr
-        } = await exec(commandString);
+        } = await exec(leaseFileCommand);
         if(stderr){
             throw new Error(stderr);
         }
@@ -53,7 +53,7 @@ router.get('/leases',async (req,res,next)=>{
                 name:parts[3]
             }
         });
-        leases.pop();
+        //leases.pop();
         res.json(leases);
     }catch(e){
         next(e);
